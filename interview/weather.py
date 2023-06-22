@@ -1,17 +1,16 @@
 
 def process_csv(reader, writer):
-    high = 200
-    low = -200
-    start = -200
-    end = -200
-
-    station = ""
-    day = ""
-    station_day = ""
+    k = 1
+    stations_dict = {}
 
     writer.write("Station Name,Date,Min Temp,Max Temp,First Temp,Last Temp\n")
 
     for line in reader:
+        if k == 1:
+            k+=1
+            continue
+        k+=1 
+
         fields = line.split(",") 
         st = fields[0]
         
@@ -23,29 +22,36 @@ def process_csv(reader, writer):
         temp = float(fields[2])
         st_day = st + "," + dt
 
-        if station_day != st_day:
-            if end > -200:
-                statline = ",".join([station, day, str(low), str(high), str(start), str(end)])
+        if stations_dict.get(st) != None:
+            
+            if stations_dict[st]["day"] != dt:
+                statline = ",".join([st, stations_dict[st]["day"], str(stations_dict[st]["low"]), str(stations_dict[st]["high"]), str(stations_dict[st]["start"]), str(stations_dict[st]["end"])])
                 writer.write(statline + "\n")
 
-            station = st
-            day = dt
-            station_day = st_day
+                stations_dict[st]["day"] = dt
+                stations_dict[st]["end"] = temp
+                stations_dict[st]["start"] = temp
+                stations_dict[st]["high"] = temp
+                stations_dict[st]["low"] = temp
 
-            end = temp
-            start = temp
-            high = temp
-            low = temp
-
+            else:
+                stations_dict[st]["start"] = temp
+                if temp > stations_dict[st]["high"]:
+                    stations_dict[st]["high"] = temp
+                if temp < stations_dict[st]["low"]:
+                    stations_dict[st]["low"] = temp
+                
         else:
-            start = temp
-            if temp > high:
-                high = temp
-            if temp < low:
-                low = temp
+            stations_dict[st] = {}
 
-    if end > -200:
-        statline = ",".join([station, day, str(low), str(high), str(start), str(end)])
+            stations_dict[st]["day"] = dt
+            stations_dict[st]["end"] = temp
+            stations_dict[st]["start"] = temp
+            stations_dict[st]["high"] = temp
+            stations_dict[st]["low"] = temp
+
+    for st in stations_dict.keys():
+        statline = ",".join([st, stations_dict[st]["day"], str(stations_dict[st]["low"]), str(stations_dict[st]["high"]), str(stations_dict[st]["start"]), str(stations_dict[st]["end"])])
         writer.write(statline + "\n")        
 
     #Foster Weather Station,01/01/2016 11:00:00 PM,69.0        
