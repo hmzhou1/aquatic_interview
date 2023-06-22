@@ -24,3 +24,5 @@ def test_replace_me():
     writer = sys.stdout
     weather.process_csv(reader, writer)
     #assert writer.getvalue() == "Saw 2 lines\n"
+
+test_replace_me()

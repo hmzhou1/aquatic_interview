@@ -49,4 +49,4 @@ def process_csv(reader, writer):
         writer.write(statline + "\n")        
 
     #Foster Weather Station,01/01/2016 11:00:00 PM,69.0        
-    writer.write(f"Saw {len(reader.readlines())} lines" + "\n")
+    #writer.write(f"Saw {len(reader.readlines())} lines" + "\n")

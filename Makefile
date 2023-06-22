@@ -49,6 +49,9 @@ repl: ## Run an iPython REPL
 run: $(DEPS) ## Run the program on the provided dataset
 	cat data/chicago_beach_weather.csv | ./main
 
+mytest: $(DEPS) ## Run the program on the provided dataset
+	cat data/chicago_beach_weather_hanson.csv | ./main
+
 patch: ## Generate a patch file to submit for your solution
 	git add .
 	git diff --binary origin/master > aquatic_interview_solution.patch
